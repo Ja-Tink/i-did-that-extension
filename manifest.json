@@ -1,0 +1,20 @@
+{
+    "manifest_version": 2,
+    "name": "I Did That",
+    "version": "1.0",
+  
+    "description": "Adds 'I did that' to all webpages matching whitehouse.gov.",
+  
+    "icons": {
+      "48": "icons/placeholder-48.png"
+    },
+  
+    "content_scripts": [
+      {
+        "matches": ["*://*.whitehouse.gov/*"],
+        "js": ["i-did-that.js"]
+      }
+    ],
+
+    "permissions": ["activeTab"]
+  }

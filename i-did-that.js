@@ -18,27 +18,60 @@ trumpPic.onload = function () {
     //set z position to very large so it appears
     trumpPic.style.zIndex = "9999"
 
-    //setting position (bottom left) based on image size
-    trumpPic.style.bottom = "0px"
-    trumpPic.style.left = "0px"
+    trumpPic.style.cursor = "grab"
+
+    // Default position (bottom left)
+    let savedPosition = JSON.parse(localStorage.getItem("imagePosition"));
+    if (savedPosition) {
+        trumpPic.style.left = savedPosition.left;
+        trumpPic.style.top = savedPosition.top;
+    } else {
+        trumpPic.style.bottom = "10px";
+        trumpPic.style.left = "10px";
+    }
+
     
-    //adding clickable functionality
-    trumpPic.onclick = function() {
-        moveImage(trumpPic)
-    };
+    // Enable drag functionality
+    makeImageDraggable(trumpPic);
 
     //add to image
     document.body.appendChild(trumpPic)
 };
 
-//moves image to left/right side
-function moveImage (img) {
-    if (img.style.left != ""){
-        img.style.left = ""
-        img.style.right = "0px"
-    }
-    else{
-        img.style.right = ""
-        img.style.left = "0px"
-    }
-};
+// Dragging functionality
+function makeImageDraggable(img) {
+    let offsetX, offsetY, isDragging = false;
+
+    img.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+        isDragging = true;
+        offsetX = event.clientX - img.getBoundingClientRect().left;
+        offsetY = event.clientY - img.getBoundingClientRect().top;
+        img.style.cursor = "grabbing";
+    });
+
+    document.addEventListener("mousemove", (event) => {
+        if (isDragging) {
+            img.style.left = event.clientX - offsetX + "px";
+            img.style.top = event.clientY - offsetY + "px";
+        }
+    });
+
+    document.addEventListener("mouseup", () => {
+        if (isDragging) {
+            isDragging = false;
+            img.style.cursor = "grab";
+            saveImagePosition(img);
+        }
+    });
+
+    img.ondragstart = () => false; // Prevent default drag behavior
+}
+
+// Save position in local storage
+function saveImagePosition(img) {
+    localStorage.setItem("imagePosition", JSON.stringify({
+        left: img.style.left,
+        top: img.style.top
+    }));
+}

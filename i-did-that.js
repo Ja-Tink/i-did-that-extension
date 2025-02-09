@@ -1,4 +1,4 @@
-image_path = "images/placeholder.jpg"
+image_path = "images/i-did-that-trump-point.png"
 const new_height = 150
 
 //create image

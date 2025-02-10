@@ -11,7 +11,7 @@
   
     "content_scripts": [
       {
-        "matches": ["*://*.whitehouse.gov/*"],
+        "matches": ["*://*.whitehouse.gov/*", "*://*.doge.gov/*"],
         "js": ["i-did-that.js"]
       }
     ],

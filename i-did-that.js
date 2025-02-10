@@ -1,28 +1,21 @@
-image_path = "images/i-did-that-trump-point-left.png"
-mirror_path = "images/i-did-that-trump-point-right.png"
+left_img_path = "images/i-did-that-trump-point-left.png"
+right_img_path = "images/i-did-that-trump-point-right.png"
 
-image_url = browser.runtime.getURL(image_path)
-mirror_url = browser.runtime.getURL(mirror_path)
+left_img_url = browser.runtime.getURL(left_img_path)
+right_img_url = browser.runtime.getURL(right_img_path)
 
 const new_height = 150
 
 //create default image, defaults to left
 const trumpPic = document.createElement("img")
-trumpPic.src = image_url
+trumpPic.src = left_img_url
 
-//load appropriate image:
-//default side is left
-if (localStorage.getItem("image_version") === null || localStorage.getItem("image_version") === "left"){
-    initializeImage(trumpPic);
-} //load right size image if flagged
-else if (localStorage.getItem("image_version") === "right"){
-    initializeImage(rightPic);
-}  
+initializeImage(trumpPic);
 
 //sets image styling and adds it to the page
 function initializeImage(img) {
     if (localStorage.getItem("image_version") === "right"){
-        trumpPic.src = mirror_url;
+        trumpPic.src = right_img_url;
     }  
 
     //after default (left) image loads, do the rest
@@ -75,12 +68,12 @@ function makeImageDraggable(img) {
             img.style.top = event.clientY - offsetY + "px";
 
             // if image is on the right:
-            if (img.offsetLeft > window.innerWidth / 2 && img.src != mirror_url){
+            if (img.offsetLeft > window.innerWidth / 2 && img.src != right_img_url) {
                 swapImage("right", img);
             }
             // if image is on the left:
-            else if (img.offsetLeft <= window.innerWidth /2 && img.src != image_url){
-                swapImage("left", img);
+            else if (img.offsetLeft <= window.innerWidth / 2 && img.src != left_img_url) {
+                swapImage("right", img);
             }
         }
     });
@@ -108,7 +101,7 @@ function saveImagePosition(img) {
 }
 
 function saveImageVersion(img) {
-    if (img.src == image_url) {
+    if (img.src == left_img_url) {
         localStorage.setItem("image_version", "left");
     } else {
         localStorage.setItem("image_version", "right");
@@ -118,9 +111,9 @@ function saveImageVersion(img) {
 //swaps the image being used on the page
 function swapImage(side, img) {
     if (side === "left") {
-        img.src = image_url
+        img.src = left_img_url
     }
     else if (side === "right") {
-        img.src = mirror_url
+        img.src = right_img_url
     }
 }

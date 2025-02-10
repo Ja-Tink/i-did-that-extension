@@ -12,7 +12,7 @@ rightPic.src = browser.runtime.getURL(mirror_path)
 
 //load appropriate image:
 //default side is left
-if (localStorage.getItem("image_version") === undefined || localStorage.getItem("image_version") === "left"){
+if (localStorage.getItem("image_version") === null || localStorage.getItem("image_version") === "left"){
     initializeImage(trumpPic);
 } //load right size image if flagged
 else if (localStorage.getItem("image_version") === "right"){

@@ -6,7 +6,7 @@ const trumpPic = document.createElement("img")
 trumpPic.src = browser.runtime.getURL(image_path)
 
 //make right version of image
-mirror_path = "images/i-did-that-trump-point-right.jpg"
+mirror_path = "images/i-did-that-trump-point-right.png"
 const rightPic = document.createElement("img")
 rightPic.src = browser.runtime.getURL(mirror_path)
 

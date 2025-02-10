@@ -73,7 +73,7 @@ function makeImageDraggable(img) {
             }
             // if image is on the left:
             else if (img.offsetLeft <= window.innerWidth / 2 && img.src != left_img_url) {
-                swapImage("right", img);
+                swapImage("left", img);
             }
         }
     });

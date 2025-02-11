@@ -1,14 +1,14 @@
 image_path = "images/i-did-that-trump-point-left.png"
-mirror_path = "images/i-did-that-trump-point-right.png"
-
-image_url = browser.runtime.getURL(image_path)
-mirror_url = browser.runtime.getURL(mirror_path)
-
 const new_height = 150
 
-//create default image, defaults to left
+//create default (left) image
 const trumpPic = document.createElement("img")
-trumpPic.src = image_url
+trumpPic.src = browser.runtime.getURL(image_path)
+
+//make right version of image
+mirror_path = "images/i-did-that-trump-point-right.png"
+const rightPic = document.createElement("img")
+rightPic.src = browser.runtime.getURL(mirror_path)
 
 //load appropriate image:
 //default side is left
@@ -20,11 +20,7 @@ else if (localStorage.getItem("image_version") === "right"){
 }  
 
 //sets image styling and adds it to the page
-function initializeImage(img) {
-    if (localStorage.getItem("image_version") === "right"){
-        trumpPic.src = mirror_url;
-    }  
-
+function initializeImage(img){
     //after default (left) image loads, do the rest
     img.onload = function () {
         //resize image to new_height height
@@ -73,15 +69,6 @@ function makeImageDraggable(img) {
         if (isDragging) {
             img.style.left = event.clientX - offsetX + "px";
             img.style.top = event.clientY - offsetY + "px";
-
-            // if image is on the right:
-            if (img.offsetLeft > window.innerWidth / 2 && img.src != mirror_url){
-                swapImage("right", img);
-            }
-            // if image is on the left:
-            else if (img.offsetLeft <= window.innerWidth /2 && img.src != image_url){
-                swapImage("left", img);
-            }
         }
     });
 
@@ -89,10 +76,19 @@ function makeImageDraggable(img) {
         if (isDragging) {
             isDragging = false;
             img.style.cursor = "grab";
-            
+
+            //if the image changed sides (left/right), we need to replace it with the mirror
+            let newImg
+            // if image is on the right:
+            if (img.offsetLeft > window.innerWidth / 2){
+                newImg = swapImage("right", img);
+            }
+            // if image is on the left:
+            else if (img.offsetLeft <= window.innerWidth /2){
+                newImg = swapImage("left", img);
+            }
             //save new position
-            saveImagePosition(img);
-            saveImageVersion(img);
+            saveImagePosition(newImg);
         }
     });
 
@@ -107,20 +103,42 @@ function saveImagePosition(img) {
     }));
 }
 
-function saveImageVersion(img) {
-    if (img.src == image_url) {
-        localStorage.setItem("image_version", "left");
-    } else {
-        localStorage.setItem("image_version", "right");
-    }
-}
-
 //swaps the image being used on the page
-function swapImage(side, img) {
-    if (side === "left") {
-        img.src = image_url
+function swapImage(side, oldImage) {
+    if (side === "left"){
+        //set all styling to that of the old image
+        trumpPic.style.left = oldImage.style.left;
+        trumpPic.style.top = oldImage.style.top;
+        trumpPic.style.position = "fixed";
+        trumpPic.style.zIndex = "9999";
+        trumpPic.style.cursor = "grab";
+        //resize image to appropriate height
+        const scaling_value = new_height / trumpPic.naturalHeight
+        trumpPic.style.height = trumpPic.naturalHeight * scaling_value + "px"
+        trumpPic.style.width = "auto"
+        //make draggable and replace the old image
+        makeImageDraggable(trumpPic);
+        oldImage.parentNode.replaceChild(trumpPic, oldImage);
+        //set side in storage
+        localStorage.setItem("image_version", "left");
+        return trumpPic;
     }
-    else if (side === "right") {
-        img.src = mirror_url
+    else if (side === "right"){
+        //take old styling
+        rightPic.style.left = oldImage.style.left;
+        rightPic.style.top = oldImage.style.top;
+        rightPic.style.position = "fixed";
+        rightPic.style.zIndex = "9999";
+        rightPic.style.cursor = "grab";
+        //resize mirror image
+        const mirror_scaling_value = new_height / rightPic.naturalHeight
+        rightPic.style.height = rightPic.naturalHeight * mirror_scaling_value + "px"
+        rightPic.style.width = "auto"
+        //make draggable and replace old image
+        makeImageDraggable(rightPic);
+        oldImage.parentNode.replaceChild(rightPic, oldImage);
+        //set side in storage
+        localStorage.setItem("image_version", "right");
+        return rightPic;
     }
 }

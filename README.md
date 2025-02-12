@@ -18,5 +18,8 @@ You can click and drag the image to move it around the page. It will save its po
 ## Contributing
 See `CONTRIBUTING.md`.
 
+## Code of Conduct
+See `CODE_OF_CONDUCT.md`.
+
 ## Notice on Image Rights
 The images found in the `images` directory are our own modifications of copyright-free images in the public domain distributed by the National Archives. Our edits to these images are distributed under the terms of the GPL license as detailed in `LICENSE.md`.

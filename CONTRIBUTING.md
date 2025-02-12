@@ -8,4 +8,4 @@ This is a project we made for Open Source Software Development, a class at NYU. 
 
 ## Conduct:
 
-All contributors to this project are expected to treat each other with respect, following the guidelines outlined in [The Contributor Covenant.](https://www.contributor-covenant.org)
+All contributors to this project are expected to treat each other with respect, following the [code of conduct](CODE_OF_CONDUCT.md).

@@ -29,7 +29,7 @@ function initializeImage(img){
         //fix image (doesnt move when scrolling)
         img.style.position = "fixed"
         //set z position to very large so it appears
-        img.style.zIndex = "9999"
+        img.style.zIndex = Number.MAX_SAFE_INTEGER;
 
         img.style.cursor = "grab"
 
